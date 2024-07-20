@@ -19,7 +19,9 @@ model Referral {
   referrerEmail String
   refereeName   String
   refereeEmail  String
-  courseInterest String
-  referralSource String
+  courseInterested String
+  howDidYouHear String
+  referralCode  String
+  message       String
   createdAt     DateTime @default(now())
 }

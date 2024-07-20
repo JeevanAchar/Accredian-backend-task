@@ -2,9 +2,9 @@ const prisma = require("../config/database.js");
 const mailService = require("../services/mailService.js");
 
 const createReferral = async (req, res) => {
-    const { referrerName, referrerEmail, refereeName, refereeEmail, courseInterest, referralSource } = req.body;
+    const { referrerName, referrerEmail, refereeName, refereeEmail, courseInterested, howDidYouHear, referralCode, message } = req.body;
 
-    if (!referrerName || !referrerEmail || !refereeName || !refereeEmail || !courseInterest || !referralSource) {
+    if (!referrerName || !referrerEmail || !refereeName || !refereeEmail || !courseInterested) {
         return res.status(400).send('All fields are required');
     }
 
@@ -15,16 +15,24 @@ const createReferral = async (req, res) => {
                 referrerEmail,
                 refereeName,
                 refereeEmail,
-                courseInterest,
-                referralSource
+                courseInterested,
+                howDidYouHear,
+                referralCode,
+                message
             }
         });
 
-        await mailService.sendReferralEmail(referrerName, refereeEmail, refereeName, courseInterest);
+        await mailService.sendReferralEmail(referrerName, refereeEmail, refereeName, courseInterested);
 
-        res.status(201).json(newReferral);
+        res.status(201).json({
+            statusCode: 201,
+            message: "Success",
+            data: {
+                refereeName,
+                courseInterested
+            }
+        });
     } catch (error) {
-        console.log({ referrerName, referrerEmail, refereeName, refereeEmail, courseInterest, referralSource })
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
     }
