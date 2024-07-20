@@ -10,6 +10,20 @@ app.use(express.json());
 
 
 // Routes
+app.get("/", (req, res) => {
+    try {
+        res.status(200).json({
+            statusCode: 200,
+            Mesage: "API is working"
+        })
+    } catch (error) {
+        console.error(error);
+        return res.statusCode(500).json({
+            statusCode: 500,
+            Message: "Internal Server Error"
+        });
+    }
+})
 app.use("/api", referralRoutes);
 
 const PORT = process.env.PORT || 5000;
